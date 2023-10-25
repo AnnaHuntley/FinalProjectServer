@@ -1,0 +1,27 @@
+<%= form_with(model: bucket_list) do |form| %>
+  <% if bucket_list.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(bucket_list.errors.count, "error") %> prohibited this bucket_list from being saved:</h2>
+
+      <ul>
+        <% bucket_list.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :item, style: "display: block" %>
+    <%= form.text_field :item %>
+  </div>
+
+  <div>
+    <%= form.label :user_id, style: "display: block" %>
+    <%= form.text_field :user_id %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

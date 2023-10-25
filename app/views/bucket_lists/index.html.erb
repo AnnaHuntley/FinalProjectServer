@@ -1,0 +1,14 @@
+<p style="color: green"><%= notice %></p>
+
+<h1>Bucket lists</h1>
+
+<div id="bucket_lists">
+  <% @bucket_lists.each do |bucket_list| %>
+    <%= render bucket_list %>
+    <p>
+      <%= link_to "Show this bucket list", bucket_list %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New bucket list", new_bucket_list_path %>

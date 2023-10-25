@@ -1,0 +1,10 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @bucket_list %>
+
+<div>
+  <%= link_to "Edit this bucket list", edit_bucket_list_path(@bucket_list) %> |
+  <%= link_to "Back to bucket lists", bucket_lists_path %>
+
+  <%= button_to "Destroy this bucket list", @bucket_list, method: :delete %>
+</div>
