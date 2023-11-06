@@ -65,4 +65,27 @@ Devise.setup do |config|
   # ==> Registerable (Optional)
   # Configuration for user registration, whether to sign in automatically after changing a password.
   # config.sign_in_after_change_password = true
+
+  # ==> API Authentication Configuration
+  # Use token-based authentication for API
+  config.skip_session_storage = [:http_auth]
+  config.navigational_formats = ['*/*', :json]
+
+  # ==> Token Authentication Keys (Add these lines)
+  config.authentication_keys = [:email]  # or other keys as needed
+  config.strip_whitespace_keys = [:email]  # or other keys as needed
+
+  # ==> Token Expire Time (optional)
+  # If you want to configure token expiration, you can add this line:
+  # config.expire_auth_token_on_timeout = true
+  # This will make tokens expire after the `timeout_in` duration.
+
+  # ==> Email Sending Configuration (optional)
+  # You can configure the sender email for Devise here:
+  # config.mailer_sender = 'your-email@example.com'
+
+  # ==> Password Complexity Configuration (optional)
+  # Define the range for password length and email format validation regex:
+  # config.password_length = 6..128
+  # config.email_regexp = /\A[^@\s]+@[^@\s]+\z/
 end

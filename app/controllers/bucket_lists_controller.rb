@@ -24,7 +24,7 @@ class BucketListsController < ApplicationController
 
   # POST /bucket_lists or /bucket_lists.json
   def create
-    @bucket_list = BucketList.new(bucket_list_params)
+    @bucket_list = current_user.bucket_lists.build(bucket_list_params)
 
     respond_to do |format|
       if @bucket_list.save
@@ -68,6 +68,6 @@ class BucketListsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def bucket_list_params
-      params.require(:bucket_list).permit(:item, :user_id)
+      params.require(:bucket_list).permit(:item)
     end
 end

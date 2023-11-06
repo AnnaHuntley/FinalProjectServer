@@ -25,7 +25,7 @@ class AchievementsController < ApplicationController
 
   # POST /achievements or /achievements.json
   def create
-    @achievement = Achievement.new(achievement_params)
+    @achievement = current_user.achievements.build(achievement_params)
 
     respond_to do |format|
       if @achievement.save
