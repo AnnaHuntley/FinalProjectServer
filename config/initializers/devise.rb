@@ -69,7 +69,9 @@ Devise.setup do |config|
   # ==> API Authentication Configuration
   # Use token-based authentication for API
   config.skip_session_storage = [:http_auth]
-  config.navigational_formats = ['*/*', :json]
+  #config.navigational_formats = ['*/*', :json]
+  config.navigational_formats = ['*/*', :html, :json]
+
 
   # ==> Token Authentication Keys (Add these lines)
   config.authentication_keys = [:email]  # or other keys as needed

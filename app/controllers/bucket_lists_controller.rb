@@ -1,7 +1,7 @@
 class BucketListsController < ApplicationController
   skip_before_action :verify_authenticity_token
   before_action :set_bucket_list, only: %i[ show edit update destroy ]
-  before_action :authenticate_user!
+  #before_action :authenticate_user!
 
 
   # GET /bucket_lists or /bucket_lists.json

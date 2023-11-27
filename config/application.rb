@@ -1,4 +1,6 @@
 require 'devise'
+require 'rack/cors'
+
 
 require_relative "boot"
 
@@ -11,6 +13,7 @@ Bundler.require(*Rails.groups)
 module MemoryApp
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
+    config.action_controller.forgery_protection_origin_check = false
     config.load_defaults 7.0
 
     # Configuration for the application, engines, and railties goes here.
@@ -20,5 +23,7 @@ module MemoryApp
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+
+    
   end
 end

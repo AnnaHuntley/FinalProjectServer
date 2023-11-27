@@ -7,3 +7,15 @@
 <div>
   <%= link_to "Back to achievements", achievements_path %>
 </div>
+
+<% if @achievement.errors.any? %>
+  <div style="color: red">
+    <h2><%= pluralize(@achievement.errors.count, "error") %> prohibited this achievement from being saved:</h2>
+
+    <ul>
+      <% @achievement.errors.each do |error| %>
+        <li><%= error.full_message %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>

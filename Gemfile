@@ -69,7 +69,10 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 
-  gem 'rack-cors'
+  
+gem 'rack-cors'
+
+
 
   gem 'devise'
 

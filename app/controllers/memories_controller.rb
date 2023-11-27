@@ -1,7 +1,7 @@
 class MemoriesController < ApplicationController
   skip_before_action :verify_authenticity_token
   before_action :set_memory, only: %i[ show edit update destroy ]
-  before_action :authenticate_user!
+  #before_action :authenticate_user!
 
 
   # GET /memories or /memories.json
