@@ -30,11 +30,15 @@
     <%= form.label :location, style: "display: block" %>
     <%= form.text_field :location %>
   </div>
-
+   <div>
+    <%= form.label :photo, style: "display: block" %>
+    <%= form.file_field :photo %>
+  </div>
+<!--
   <div>
     <%= form.label :user_id, style: "display: block" %>
     <%= form.text_field :user_id %>
-  </div>
+  </div> -->
 
   <div>
     <%= form.submit %>

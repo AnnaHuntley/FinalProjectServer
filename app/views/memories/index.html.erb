@@ -1,14 +1,11 @@
-<p style="color: green"><%= notice %></p>
-
-<h1>Memories</h1>
-
-<div id="memories">
-  <% @memories.each do |memory| %>
-    <%= render memory %>
-    <p>
-      <%= link_to "Show this memory", memory %>
-    </p>
-  <% end %>
-</div>
-
-<%= link_to "New memory", new_memory_path %>
+<% @memories.each do |memory| %>
+  <%= render memory %>
+  <p>
+    <%= link_to "Show this memory", memory if memory.title.present? %>
+    <% if memory.photo.attached? %>
+      <%= image_tag memory.photo.url %>
+    <% else %>
+      <p>No photo available</p>
+    <% end %>
+  </p>
+<% end %>

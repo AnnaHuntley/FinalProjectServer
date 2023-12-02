@@ -1,6 +1,8 @@
 class BucketListsController < ApplicationController
   skip_before_action :verify_authenticity_token
+  protect_from_forgery with: :exception, unless: -> {request.format.json?}
   before_action :set_bucket_list, only: %i[ show edit update destroy ]
+  
   #before_action :authenticate_user!
 
 
@@ -24,7 +26,8 @@ class BucketListsController < ApplicationController
 
   # POST /bucket_lists or /bucket_lists.json
   def create
-    @bucket_list = current_user.bucket_lists.build(bucket_list_params)
+    #@bucket_list = current_user.bucket_lists.build(bucket_list_params)
+    @bucket_list = BucketList.new(bucket_list_params)
 
     respond_to do |format|
       if @bucket_list.save

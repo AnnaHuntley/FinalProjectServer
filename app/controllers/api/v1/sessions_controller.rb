@@ -1,6 +1,4 @@
 class Api::V1::SessionsController < ApplicationController
-  # skip_before_action :verify_authenticity_token
-
   def create
     user = User.find_by(email: params[:user][:email])
 
@@ -8,7 +6,7 @@ class Api::V1::SessionsController < ApplicationController
       token = user.generate_authentication_token
       render json: { user: user, authentication_token: token }, status: :ok
     else
-      render json: { error: 'Invalid credentials' }, status: :unauthorized
+      render json: { error: 'Invalid email or password' }, status: :unauthorized
     end
   end
 end

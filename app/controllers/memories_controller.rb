@@ -1,5 +1,7 @@
 class MemoriesController < ApplicationController
   skip_before_action :verify_authenticity_token
+  protect_from_forgery with: :exception, unless: -> {request.format.json?}
+  before_action :set_url_options
   before_action :set_memory, only: %i[ show edit update destroy ]
   #before_action :authenticate_user!
 
@@ -7,7 +9,14 @@ class MemoriesController < ApplicationController
   # GET /memories or /memories.json
   def index
     @memories = Memory.all
+  
+    respond_to do |format|
+      format.html
+      format.json { render :index, status: :ok, locals: { memories: @memories.uniq } }
+    end
   end
+  
+  
 
   # GET /memories/1 or /memories/1.json
   def show
@@ -24,18 +33,20 @@ class MemoriesController < ApplicationController
 
   # POST /memories or /memories.json
   def create
-    @memory = current_user.memories.build(memory_params)
-
-    respond_to do |format|
-      if @memory.save
-        format.html { redirect_to memory_url(@memory), notice: "Memory was successfully created." }
-        format.json { render :show, status: :created, location: @memory }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @memory.errors, status: :unprocessable_entity }
+    #@memory = current_user.memories.build(memory_params)
+  
+      @memory = Memory.new(memory_params)
+      respond_to do |format|
+        if @memory.save
+          format.html { redirect_to memory_url(@memory), notice: "Memory was successfully created." }
+          format.json { render :show, status: :created, location: @memory }
+        else
+          format.html { render :new, status: :unprocessable_entity }
+          format.json { render json: @memory.errors, status: :unprocessable_entity }
+        end
       end
     end
-  end
+    
 
   # PATCH/PUT /memories/1 or /memories/1.json
   def update
@@ -66,8 +77,15 @@ class MemoriesController < ApplicationController
       @memory = Memory.find(params[:id])
     end
 
+    
+      def set_url_options
+        ActiveStorage::Current.url_options = { host: request.base_url }
+      end
+      
+
     # Only allow a list of trusted parameters through.
     def memory_params
-      params.require(:memory).permit(:title, :description, :date, :location, :user_id)
+      #params.require(:memory).permit(:title, :description, :date, :location, :photo, :user_id)
+      params.require(:memory).permit(:description, :date, :location, :photo)
     end
 end

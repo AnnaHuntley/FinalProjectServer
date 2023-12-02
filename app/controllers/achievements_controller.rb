@@ -1,6 +1,6 @@
 class AchievementsController < ApplicationController
   skip_before_action :verify_authenticity_token
-  
+  protect_from_forgery with: :exception, unless: -> {request.format.json?}
   before_action :set_achievement, only: %i[ show edit update destroy ]
  # before_action :authenticate_user!
 
