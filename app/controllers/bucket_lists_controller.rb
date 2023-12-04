@@ -71,6 +71,6 @@ class BucketListsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def bucket_list_params
-      params.require(:bucket_list).permit(:item)
+      params.require(:bucket_list).permit(:item, :date)
     end
 end

@@ -1,11 +1,17 @@
+<h1>Memories</h1>
+
 <% @memories.each do |memory| %>
-  <%= render memory %>
-  <p>
-    <%= link_to "Show this memory", memory if memory.title.present? %>
+  <div>
+    <%= memory.description %>
+    <%= memory.date %>
+    <%= memory.location %>
     <% if memory.photo.attached? %>
       <%= image_tag memory.photo.url %>
     <% else %>
       <p>No photo available</p>
     <% end %>
-  </p>
+    <%= link_to "Edit", edit_memory_path(memory) %>
+    <%= link_to "Delete", memory, method: :delete, data: { confirm: "Are you sure?" } %>
+  </div>
 <% end %>
+

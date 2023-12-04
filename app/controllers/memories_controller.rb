@@ -50,7 +50,16 @@ class MemoriesController < ApplicationController
 
   # PATCH/PUT /memories/1 or /memories/1.json
   def update
+    puts "Params: #{params.inspect}"
     respond_to do |format|
+      @memory = Memory.find(params[:id])
+  
+      if @memory.frozen?
+        # Create a new instance to avoid modifying a frozen object
+        @memory = Memory.new(memory_params)
+        @memory.id = params[:id] # Set the ID to the existing ID
+      end
+  
       if @memory.update(memory_params)
         format.html { redirect_to memory_url(@memory), notice: "Memory was successfully updated." }
         format.json { render :show, status: :ok, location: @memory }
@@ -60,6 +69,8 @@ class MemoriesController < ApplicationController
       end
     end
   end
+  
+  
 
   # DELETE /memories/1 or /memories/1.json
   def destroy
@@ -86,6 +97,6 @@ class MemoriesController < ApplicationController
     # Only allow a list of trusted parameters through.
     def memory_params
       #params.require(:memory).permit(:title, :description, :date, :location, :photo, :user_id)
-      params.require(:memory).permit(:description, :date, :location, :photo)
+      params.require(:memory).permit(:title, :description, :date, :location, :photo)
     end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_11_28_120452) do
+ActiveRecord::Schema[7.0].define(version: 2023_12_04_132946) do
   create_table "achievements", force: :cascade do |t|
     t.string "title"
     t.text "description"
@@ -53,6 +53,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_28_120452) do
     t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.date "date"
     t.index ["user_id"], name: "index_bucket_lists_on_user_id"
   end
 
