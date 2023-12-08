@@ -75,7 +75,7 @@ Devise.setup do |config|
 
   # ==> Token Authentication Keys (Add these lines)
   config.authentication_keys = [:email]  # or other keys as needed
-  config.strip_whitespace_keys = [:email]  # or other keys as needed
+  #config.strip_whitespace_keys = [:email]  # or other keys as needed
 
   # ==> Token Expire Time (optional)
   # If you want to configure token expiration, you can add this line:

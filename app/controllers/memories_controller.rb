@@ -1,22 +1,18 @@
 class MemoriesController < ApplicationController
   skip_before_action :verify_authenticity_token
-  protect_from_forgery with: :exception, unless: -> {request.format.json?}
-  before_action :set_url_options
-  before_action :set_memory, only: %i[ show edit update destroy ]
-  #before_action :authenticate_user!
-
+  protect_from_forgery with: :exception, unless: -> { request.format.json? }
+  before_action :set_memory, only: %i[show edit update destroy]
 
   # GET /memories or /memories.json
   def index
     @memories = Memory.all
-  
+
     respond_to do |format|
-      format.html
-      format.json { render :index, status: :ok, locals: { memories: @memories.uniq } }
+      format.json do
+        render json: @memories.map { |memory| memory_as_json(memory) }
+      end
     end
   end
-  
-  
 
   # GET /memories/1 or /memories/1.json
   def show
@@ -31,35 +27,23 @@ class MemoriesController < ApplicationController
   def edit
   end
 
-  # POST /memories or /memories.json
   def create
-    #@memory = current_user.memories.build(memory_params)
-  
-      @memory = Memory.new(memory_params)
-      respond_to do |format|
-        if @memory.save
-          format.html { redirect_to memory_url(@memory), notice: "Memory was successfully created." }
-          format.json { render :show, status: :created, location: @memory }
-        else
-          format.html { render :new, status: :unprocessable_entity }
-          format.json { render json: @memory.errors, status: :unprocessable_entity }
-        end
+    @memory = Memory.new(memory_params)
+    handle_file_upload(params[:memory][:photo])
+
+    respond_to do |format|
+      if @memory.save
+        format.turbo_stream { redirect_to memories_url }
+        format.json { render json: @memory, status: :created, location: @memory }
+      else
+        format.turbo_stream { render turbo_stream: turbo_stream.replace(@memory, partial: "form", locals: { memory: @memory }) }
+        format.json { render json: @memory.errors, status: :unprocessable_entity }
       end
     end
-    
+  end
 
-  # PATCH/PUT /memories/1 or /memories/1.json
   def update
-    puts "Params: #{params.inspect}"
     respond_to do |format|
-      @memory = Memory.find(params[:id])
-  
-      if @memory.frozen?
-        # Create a new instance to avoid modifying a frozen object
-        @memory = Memory.new(memory_params)
-        @memory.id = params[:id] # Set the ID to the existing ID
-      end
-  
       if @memory.update(memory_params)
         format.html { redirect_to memory_url(@memory), notice: "Memory was successfully updated." }
         format.json { render :show, status: :ok, location: @memory }
@@ -71,8 +55,8 @@ class MemoriesController < ApplicationController
   end
   
   
+  
 
-  # DELETE /memories/1 or /memories/1.json
   def destroy
     @memory.destroy
 
@@ -83,20 +67,50 @@ class MemoriesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_memory
-      @memory = Memory.find(params[:id])
-    end
 
-    
-      def set_url_options
-        ActiveStorage::Current.url_options = { host: request.base_url }
-      end
-      
+  def set_memory
+    @memory = Memory.find(params[:id])
+  end
 
-    # Only allow a list of trusted parameters through.
-    def memory_params
-      #params.require(:memory).permit(:title, :description, :date, :location, :photo, :user_id)
-      params.require(:memory).permit(:title, :description, :date, :location, :photo)
+  def memory_params
+    params.require(:memory).permit(:title, :description, :date, :location, :photo)
+  end
+
+  def handle_file_upload(file)
+    return unless file.present?
+
+    save_file(file)
+    @memory.photo = file.original_filename
+  end
+
+  def save_file(file)
+    return unless file.present?
+
+    FileUtils.mkdir_p('public/uploads') unless File.directory?('public/uploads')
+    File.open(Rails.root.join('public/uploads', file.original_filename), 'wb') do |f|
+      f.write(file.read)
     end
+  rescue StandardError => e
+    Rails.logger.error("Error saving file: #{e.message}")
+  end
+
+  def memory_as_json(memory)
+    {
+      id: memory.id,
+      title: memory.title,
+      description: memory.description,
+      date: memory.date,
+      location: memory.location,
+      user_id: memory.user_id,
+      created_at: memory.created_at,
+      updated_at: memory.updated_at,
+      url: memory_url(memory, format: :json),
+      photo_url: if memory.photo.present?
+                   url_for(File.join('uploads', memory.photo))
+                 else
+                   nil
+                 end
+    }
+  end
+  
 end
