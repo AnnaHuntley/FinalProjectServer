@@ -55,10 +55,10 @@ class BucketListsController < ApplicationController
 
   # DELETE /bucket_lists/1 or /bucket_lists/1.json
   def destroy
-    @memory.destroy
-
+    @bucket_list.destroy
+  
     respond_to do |format|
-      format.html { redirect_to memories_url, notice: "Memory was successfully destroyed." }
+      format.html { redirect_to bucket_lists_url, notice: "Bucket list item was successfully destroyed." }
       format.json { head :no_content }
     end
   end
